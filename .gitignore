@@ -1,0 +1,50 @@
+### Arquivos compilados ###
+target/
+*.class
+
+### Maven Wrapper (não ignorar os scripts, apenas o jar) ###
+.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+!mvnw
+!mvnw.cmd
+
+### IDEs ###
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse/STS
+.classpath
+.project
+.settings
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+# VS Code
+.vscode/
+
+### Logs e arquivos temporários ###
+*.log
+*.tmp
+*.temp
+
+### Exceções - manter diretórios de build específicos ###
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Sistema ###
+HELP.md
