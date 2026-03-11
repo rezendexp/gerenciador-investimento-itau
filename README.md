@@ -15,29 +15,28 @@ Este projeto simula um sistema de processamento de eventos de investimento de al
 
 O sistema segue uma arquitetura em camadas (Web, Service, Domain, Infrastructure), isolando a lógica de negócio das integrações externas.
 
-### 🔄 Fluxo de Processamento (Sequence Diagram)
+### 🔄 Fluxo de Processamento (End-to-End)
 
 ```mermaid
 sequenceDiagram
-    participant C as Cliente (API)
-    participant S as InvestimentoService
-    participant DB as Banco de Dados (SQL)
-    participant AWS as AWS SNS
+    participant C as Cliente (Swagger/API)
+    participant J as Java Service (Spring)
+    participant DB as SQL Database
+    participant SNS as AWS SNS
+    participant SQS as AWS SQS
+    participant L as Lambda (Python)
+    participant DY as DynamoDB
 
-    C->>S: Realiza Investimento (POST)
-    S->>DB: Salva com status 'RECEBIDO'
+    C->>J: POST /investimentos/comprar
+    J->>DB: Salva Transação (STATUS: RECEBIDO)
     
-    rect rgb(240, 240, 240)
-    Note right of S: Política de Resiliência
-    loop Retry Policy (3x tentativas)
-        S->>AWS: Tenta enviar notificação SNS
-    end
+    loop Resiliência (Spring Retry)
+        J->>SNS: Publica Evento de Investimento
     end
 
-    alt Sucesso no SNS
-        S->>DB: Atualiza para 'PROCESSADO'
-        S-->>C: Retorna 200 OK
-    else Falha Definitiva (após retries)
-        S->>DB: Atualiza para 'ERRO'
-        S-->>C: Retorna 500 Internal Error
-    end
+    SNS->>SQS: Distribui Mensagem (Fan-out)
+    SQS->>L: Trigger de Processamento
+    L->>DY: Grava Auditoria (STATUS: FINALIZADO_PYTHON)
+    
+    J->>DB: Atualiza Transação (STATUS: PROCESSADO)
+    J-->>C: Retorna 200 OK
