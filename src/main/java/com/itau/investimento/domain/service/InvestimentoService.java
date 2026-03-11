@@ -53,6 +53,6 @@ public class InvestimentoService {
     public void enviarParaSns(Transacao transacao) {
         log.info("Publicando no SNS | Cliente: {} | Transação: {}",
                 transacao.getClienteId(), transacao.getId());
-        snsTemplate.sendNotification("topico-investimentos-itau", transacao, "Transacao");
+        snsTemplate.sendNotification("topico-investimentos", transacao, "Transacao");
     }
 }

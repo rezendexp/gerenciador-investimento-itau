@@ -46,5 +46,16 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# Java/Maven
+target/
+*.class
+
 ### Sistema ###
 HELP.md
